@@ -15,7 +15,7 @@ if(isset($_GET['code'])) {
     // try to get an access token
     $code = $_GET['code'];
     /* $url = 'https://accounts.google.com/o/oauth2/token'; */
-    $url = 'http://765e536a.ngrok.io/oauthserver/oauth/access_token';
+    $url = $url_app.'/oauthserver/oauth/access_token';
     // this will be our POST data to send back to the OAuth server in exchange
 	// for an access token
     $params = array(
@@ -37,13 +37,13 @@ if(isset($_GET['code'])) {
 	// Tada: we have an access token!
     echo "OAuth2 server provided access token: " . $responseObj->access_token;
 	echo "<br>";
-	echo "Get Balance : <a target='_blank' href='http://765e536a.ngrok.io/oauthserver/userbalance/userbalance?access_token=".$responseObj->access_token."'>Click here</a>";
+	echo "Get Balance : <a target='_blank' href='".$url_app."/oauthserver/userbalance/userbalance?access_token=".$responseObj->access_token."'>Click here</a>";
 	echo "<br>";
-	echo "Add Balance : <a target='_blank' href='http://765e536a.ngrok.io/oauthserver/userbalance/add?access_token=".$responseObj->access_token."'>Click here</a>";
+	echo "Add Balance : <a target='_blank' href='".$url_app."/oauthserver/userbalance/add?access_token=".$responseObj->access_token."'>Click here</a>";
 	echo "<br>";
-	echo "Logout from OauthServer : <a target='_blank' href='http://765e536a.ngrok.io/oauthserver/users/logout'>Click here</a>";
+	echo "Logout from OauthServer : <a target='_blank' href='".$url_app."/oauthserver/users/logout'>Click here</a>";
 	echo "<br>";
-	echo "Get New Token : <a href='http://765e536a.ngrok.io/myapp'>Click here</a>";
+	echo "Get New Token : <a href='".$url_app."/myapp'>Click here</a>";
 	
 }
 
