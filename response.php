@@ -1,5 +1,4 @@
 <?php
-error_reporting(0);
 /* echo strtotime("2016-09-08 20:06:05"); */
 /* echo date("Y-m-d h:i:s",1470767336);
 exit; */
@@ -11,7 +10,7 @@ require('HttpPost.class.php');
 /**
  * the OAuth server should have brought us to this page with a $_GET['code']
  */
-if(isset($_GET['code'])) { 
+if(isset($_GET['code']) && !isset($home)) {
     // try to get an access token
     $code = $_GET['code'];
     /* $url = 'https://accounts.google.com/o/oauth2/token'; */
@@ -32,19 +31,29 @@ if(isset($_GET['code'])) {
     $request->send();
 	// decode the incoming string as JSON
     $responseObj = json_decode($request->getHttpResponse());
+    $myfile = fopen("token.txt", "w") or die("Unable to open file!");
+    fwrite($myfile, $responseObj->access_token);
+    fclose($myfile);
+    header('Location: ' . $url_app.'/myapp/home.php');
 	
+}else{    
+    $myfile = fopen("token.txt", "r") or die("Unable to open file!");
+    $token = fgets($myfile);
+    fclose($myfile);
+    
+}
 
-	// Tada: we have an access token!
-    echo "OAuth2 server provided access token: " . $responseObj->access_token;
-	echo "<br>";
-	echo "Get Balance : <a target='_blank' href='".$url_app."/oauthserver/userbalance/userbalance?access_token=".$responseObj->access_token."'>Click here</a>";
-	echo "<br>";
-	echo "Add Balance : <a target='_blank' href='".$url_app."/oauthserver/userbalance/add?access_token=".$responseObj->access_token."'>Click here</a>";
-	echo "<br>";
-	echo "Logout from OauthServer : <a target='_blank' href='".$url_app."/oauthserver/users/logout'>Click here</a>";
-	echo "<br>";
-	echo "Get New Token : <a href='".$url_app."/myapp'>Click here</a>";
-	
+if($token){
+    // Tada: we have an access token!
+    //    echo "OAuth2 server provided access token: " . $responseObj->access_token;
+    echo "<br>";
+    echo "Get Balance : <a href='".$url_app."/myapp/getuserbalance.php?access_token=".$token."'>Click here</a>";
+    echo "<br>";
+    //	echo "Add Balance : <a target='_blank' href='".$url_app."/oauthserver/userbalance/add?access_token=".$responseObj->access_token."'>Click here</a>";        
+    echo "<br>";
+    echo "Logout : <a href='".$url_app."/myapp/logout.php'>Click here</a>";
+}else{
+    echo "<a href='".$url_app."/myapp'>LOGIN</a>";
 }
 
 

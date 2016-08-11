@@ -3,7 +3,7 @@
 //http://localhost/cakephpapi/oauth/authorize?client_id=1&client_secret=test&response_type=code&redirect_uri=test&redir=oauth
 require_once('config.php');
 
-$oauth2_server_url = $url_app.'/oauthserver/oauth/authorize?redir=oauth';
+$oauth2_server_url = $url_app.'/oauthserver/oauth/authorize';
 
 $query_params = array(
            'response_type' => 'code',
@@ -13,7 +13,7 @@ $query_params = array(
            'scope' => 'one'
            );
 
-$forward_url = $oauth2_server_url . '&' . http_build_query($query_params);
+$forward_url = $oauth2_server_url . '?' . http_build_query($query_params);
 
 header('Location: ' . $forward_url);
 ?>
